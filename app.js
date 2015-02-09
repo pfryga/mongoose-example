@@ -15,6 +15,11 @@ var Cat = mongoose.model('Cat', {
     name: String
 });
 
+app.use('/ping', function (req, res, next) {
+  console.log('Request Type:', req.method);
+  next();
+});
+
 app.get('/ping', function(req, res) {
     res.send('pong');
 });
@@ -30,13 +35,28 @@ app.post('/insert/:name', function(req, res) {
     });
 });
 
-app.post('/show/:name', function(req, res) {
+app.post('/get/:name', function(req, res) {
     Cat.where({
         name: req.params.name
     }).findOne(function (err, elem) {
         if (err) return res.send(err);
         if (elem) {
-            res.send('element: ' + elem.name);
+            res.send('element: ' + elem);
+        }
+    });
+});
+
+app.post('/get-all/:name', function(req, res) {
+    Cat.where({
+        name: req.params.name
+    }).find(function (err, elem) {
+        if (err) return res.send(err);
+        if (elem) {
+            var response = {
+                'collection': req.params.name,
+                'items': elem
+            };
+            res.send(response);
         }
     });
 });
