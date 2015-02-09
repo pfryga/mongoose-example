@@ -30,6 +30,28 @@ app.post('/insert/:name', function(req, res) {
     });
 });
 
+app.post('/show/:name', function(req, res) {
+    Cat.where({
+        name: req.params.name
+    }).findOne(function (err, elem) {
+        if (err) return res.send(err);
+        if (elem) {
+            res.send('element: ' + elem.name);
+        }
+    });
+});
+
+app.post('/update/:key/:value', function(req, res) {
+    Cat.findOneAndUpdate({
+        name: req.params.key
+    }, {
+        name: req.params.value
+    }, function() {
+        console.log('updated: ' + req.params.key);
+        res.send('updated: ' + req.params.key);
+    });
+});
+
 app.post('/delete/:name', function(req, res) {
     Cat.where().findOneAndRemove({
         name: req.params.name
