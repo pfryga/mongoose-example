@@ -31,6 +31,15 @@ app.post('/insert/:name', function(req, res) {
 });
 
 app.post('/delete/:name', function(req, res) {
+    Cat.where().findOneAndRemove({
+        name: req.params.name
+    }, function () {
+        console.log('removed: ' + req.params.name);
+        res.send('removed: ' + req.params.name);
+    });
+});
+
+app.post('/delete-all/:name', function(req, res) {
     Cat.find({
         name: req.params.name
     }).remove(function () {
