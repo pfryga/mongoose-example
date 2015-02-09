@@ -2,6 +2,7 @@ var express = require('express');
 var mongoose = require('mongoose');
 var app = express();
 
+app.use(express.static('public'));
 mongoose.connect('mongodb://localhost/test');
 
 var db = mongoose.connection;
@@ -66,6 +67,8 @@ app.post('/update/:key/:value', function(req, res) {
         name: req.params.key
     }, {
         name: req.params.value
+    }, {
+        upsert: true
     }, function() {
         console.log('updated: ' + req.params.key);
         res.send('updated: ' + req.params.key);
